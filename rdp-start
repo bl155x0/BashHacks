@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check for --proxy argument
+USE_PROXY=false
+for arg in "$@"; do
+    if [ "$arg" == "--proxy" ]; then
+        USE_PROXY=true
+        break
+    fi
+done
+
+# Prompt for IP, User, and Password
+read -p "Enter IP: " IP
+read -p "Enter username: " USER
+read -sp "Enter password: " PASS
+echo
+
+# xfreerdp3 command to use
+CMD="xfreerdp3 /dynamic-resolution +clipboard /v:$IP /u:$USER /p:$PASS"
+
+# Run with or without proxychains
+if [ "$USE_PROXY" == "true" ]; then
+    proxychains $CMD
+else
+    $CMD
+fi
+
